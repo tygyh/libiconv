@@ -49,7 +49,7 @@ func_file_conv ()
     / | /[!/]*) # absolute file, and not a UNC file
       if test -z "$file_conv"; then
 	# lazily determine how to convert abs files
-	case `uname -s` in
+	case $(uname -s) in
 	  MINGW*)
 	    file_conv=mingw
 	    ;;
@@ -63,13 +63,13 @@ func_file_conv ()
       fi
       case $file_conv in
 	mingw)
-	  file=`cmd //C echo "$file " | sed -e 's/"\(.*\) " *$/\1/'`
+	  file=$(cmd //C echo "$file " | sed -e 's/"\(.*\) " *$/\1/')
 	  ;;
 	cygwin | msys)
-	  file=`cygpath -m "$file" || echo "$file"`
+	  file=$(cygpath -m "$file" || echo "$file")
 	  ;;
 	wine)
-	  file=`winepath -w "$file" || echo "$file"`
+	  file=$(winepath -w "$file" || echo "$file")
 	  ;;
       esac
       ;;
@@ -86,7 +86,7 @@ func_at_file ()
 {
   operation=$2
   archive=$3
-  at_file_contents=`cat "$1"`
+  at_file_contents=$(cat "$1")
   eval set x "$at_file_contents"
   shift
 

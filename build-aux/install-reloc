@@ -116,7 +116,7 @@ done
 # Determine whether destprog is a program name or a directory name.
 if test -d "$destprog"; then
   sed_remove_trailing_slashes='s|//*$||'
-  destprog_directory=`echo "$destprog" | sed -e "$sed_remove_trailing_slashes"`
+  destprog_directory=$(echo "$destprog" | sed -e "$sed_remove_trailing_slashes")
   if test -z "$destprog_directory"; then
     destprog_directory='/'
   fi
@@ -126,12 +126,12 @@ fi
 # Prepare for remove trailing $exeext, if present.
 if test -n "$exeext"; then
   sed_quote='s,\.,\\.,g'
-  sed_remove_exeext='s|'`echo "$exeext" | sed -e "$sed_quote"`'$||'
+  sed_remove_exeext='s|'$(echo "$exeext" | sed -e "$sed_quote")'$||'
 fi
 if test -z "$destprog_directory"; then
   # Remove trailing $exeext, if present.
   if test -n "$exeext"; then
-    destprog=`echo "$destprog" | sed -e "$sed_remove_exeext"`
+    destprog=$(echo "$destprog" | sed -e "$sed_remove_exeext")
   fi
 fi
 
@@ -158,7 +158,7 @@ func_iterate ()
     for arg
     do
       if test -n "prev_arg"; then
-        destprog="$destprog_directory"/`echo "$prev_arg" | sed -e "$sed_basename_of_file"`
+        destprog="$destprog_directory"/$(echo "$prev_arg" | sed -e "$sed_basename_of_file")
         $1
       fi
       prev_arg="$arg"
@@ -173,7 +173,7 @@ func_strip ()
 {
   # Remove trailing $exeext, if present.
   if test -n "$exeext"; then
-    destprog=`echo "$destprog" | sed -e "$sed_remove_exeext"`
+    destprog=$(echo "$destprog" | sed -e "$sed_remove_exeext")
   fi
   func_verbose "$strip_prog" "$destprog$exeext" || exit $?
 }
@@ -205,12 +205,12 @@ test -n "$libdirs" || exit 0
 if test -n "$destprog_directory"; then
   installdir="$destprog_directory"
 else
-  installdir=`echo "$destprog" | sed -e 's,/[^/]*$,,'`
+  installdir=$(echo "$destprog" | sed -e 's,/[^/]*$,,')
 fi
 if test -n "$destdir"; then
   sed_quote='s,\([|.\*^$[]\),\\\1,g'
-  sed_remove_destdir='s|^'`echo "$destdir" | sed -e "$sed_quote"`'||'
-  installdir=`echo "$installdir" | sed -e "$sed_remove_destdir"`
+  sed_remove_destdir='s|^'$(echo "$destdir" | sed -e "$sed_quote")'||'
+  installdir=$(echo "$installdir" | sed -e "$sed_remove_destdir")
 fi
 
 # Compile and install wrapper.
@@ -218,7 +218,7 @@ func_create_wrapper ()
 {
   # Remove trailing $exeext, if present.
   if test -n "$exeext"; then
-    destprog=`echo "$destprog" | sed -e "$sed_remove_exeext"`
+    destprog=$(echo "$destprog" | sed -e "$sed_remove_exeext")
   fi
 
   # Compile wrapper.

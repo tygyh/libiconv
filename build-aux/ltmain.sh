@@ -92,7 +92,7 @@ scriptversion=2019-02-19.15; # UTC
 # Evaluate this file near the top of your script to gain access to
 # the functions and variables defined here:
 #
-#   . `echo "$0" | ${SED-sed} 's|[^/]*$||'`/build-aux/funclib.sh
+#   . $(echo "$0" | ${SED-sed} 's|[^/]*$||')/build-aux/funclib.sh
 #
 # If you need to override any of the default environment variable
 # settings, do that before evaluating this file.
@@ -802,7 +802,7 @@ func_echo_infix_1 ()
         _G_indent=`$ECHO "$_G_indent" | $SED "s|$_G_esc_tc||g"`
       }
     done
-    _G_indent="$progname: "`echo "$_G_indent" | $SED 's|.| |g'`"  " ## exclude from sc_prohibit_nested_quotes
+    _G_indent="$progname: "$(echo "$_G_indent" | $SED 's|.| |g')"  " ## exclude from sc_prohibit_nested_quotes
 
     func_echo_infix_1_IFS=$IFS
     IFS=$nl
@@ -3151,8 +3151,8 @@ func_convert_path_check ()
     # should not be "improved".  See libtool.info.
     if test "x$1" != "x$2"; then
       lt_replace_pathsep_chars="s|$1|$2|g"
-      func_to_host_path_result=`echo "$3" |
-        $SED -e "$lt_replace_pathsep_chars"`
+      func_to_host_path_result=$(echo "$3" |
+        $SED -e "$lt_replace_pathsep_chars")
     else
       func_to_host_path_result=$3
     fi

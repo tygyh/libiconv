@@ -36,9 +36,9 @@
 # installed.
 
 host="$1"
-host_cpu=`echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
-host_vendor=`echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
-host_os=`echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+host_cpu=$(echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/')
+host_vendor=$(echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/')
+host_os=$(echo "$host" | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/')
 
 library_path_value=$2
 
@@ -79,18 +79,18 @@ if test -n "$origin_token"; then
         # Make dir relative to installdir. (Works only if dir is absolute.)
         idir="$installdir"
         while true; do
-          dfirst=`echo "$dir" | sed -n -e 's,^//*\([^/]*\).*$,/\1,p'`
-          ifirst=`echo "$idir" | sed -n -e 's,^//*\([^/]*\).*$,/\1,p'`
+          dfirst=$(echo "$dir" | sed -n -e 's,^//*\([^/]*\).*$,/\1,p')
+          ifirst=$(echo "$idir" | sed -n -e 's,^//*\([^/]*\).*$,/\1,p')
           if test -z "$dfirst" || test -z "$ifirst"; then
             break
           fi
           if test "$dfirst" != "$ifirst"; then
             break
           fi
-          dir=`echo "$dir" | sed -e 's,^//*[^/]*,,'`
-          idir=`echo "$idir" | sed -e 's,^//*[^/]*,,'`
+          dir=$(echo "$dir" | sed -e 's,^//*[^/]*,,')
+          idir=$(echo "$idir" | sed -e 's,^//*[^/]*,,')
         done
-        dir="$origin_token"`echo "$idir" | sed -e 's,//*[^/]*,/..,g'`"$dir"
+        dir="$origin_token"$(echo "$idir" | sed -e 's,//*[^/]*,/..,g')"$dir"
         # Augment rpath_options with dir.
         rpath_options="${rpath_options}${rpath_options:+ }-Wl,-rpath,$dir"
         ;;

@@ -422,7 +422,7 @@ do
             test -d "$prefix" || exit 1
           else
             case $prefix in
-              *\'*) qprefix=`echo "$prefix" | sed "s/'/'\\\\\\\\''/g"`;;
+              *\'*) qprefix=$(echo "$prefix" | sed "s/'/'\\\\\\\\''/g");;
               *) qprefix=$prefix;;
             esac
             prefixes="$prefixes '$qprefix'"

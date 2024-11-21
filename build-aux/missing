@@ -129,10 +129,10 @@ program_details ()
 give_advice ()
 {
   # Normalize program name to check for.
-  normalized_program=`echo "$1" | sed '
+  normalized_program=$(echo "$1" | sed '
     s/^gnu-//; t
     s/^gnu//; t
-    s/^g//; t'`
+    s/^g//; t')
 
   printf '%s\n' "'$1' is $msg."
 

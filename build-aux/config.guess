@@ -42,7 +42,7 @@ timestamp='2022-05-08'
 # have a pre-POSIX /bin/sh.
 
 
-me=`echo "$0" | sed -e 's,.*/,,'`
+me=$(echo "$0" | sed -e 's,.*/,,')
 
 usage="\
 Usage: $0 [OPTION]
@@ -214,7 +214,7 @@ case $UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION in
 	    sh3eb) machine=sh-unknown ;;
 	    sh5el) machine=sh5le-unknown ;;
 	    earmv*)
-		arch=`echo "$UNAME_MACHINE_ARCH" | sed -e 's,^e\(armv[0-9]\).*$,\1,'`
+		arch=$(echo "$UNAME_MACHINE_ARCH" | sed -e 's,^e\(armv[0-9]\).*$,\1,')
 		endian=`echo "$UNAME_MACHINE_ARCH" | sed -ne 's,^.*\(eb\)$,\1,p'`
 		machine=${arch}${endian}-unknown
 		;;
@@ -246,7 +246,7 @@ case $UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION in
 	case $UNAME_MACHINE_ARCH in
 	    earm*)
 		expr='s/^earmv[0-9]/-eabi/;s/eb$//'
-		abi=`echo "$UNAME_MACHINE_ARCH" | sed -e "$expr"`
+		abi=$(echo "$UNAME_MACHINE_ARCH" | sed -e "$expr")
 		;;
 	esac
 	# The OS release
@@ -259,7 +259,7 @@ case $UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION in
 		release='-gnu'
 		;;
 	    *)
-		release=`echo "$UNAME_RELEASE" | sed -e 's/[-_].*//' | cut -d. -f1,2`
+		release=$(echo "$UNAME_RELEASE" | sed -e 's/[-_].*//' | cut -d. -f1,2)
 		;;
 	esac
 	# Since CPU_TYPE-MANUFACTURER-KERNEL-OPERATING_SYSTEM:
@@ -366,7 +366,7 @@ case $UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION in
 	# A Tn.n version is a released field test version.
 	# A Xn.n version is an unreleased experimental baselevel.
 	# 1.2 uses "1.2" for uname -r.
-	OSF_REL=`echo "$UNAME_RELEASE" | sed -e 's/^[PVTX]//' | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
+	OSF_REL=$(echo "$UNAME_RELEASE" | sed -e 's/^[PVTX]//' | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz)
 	GUESS=$UNAME_MACHINE-dec-osf$OSF_REL
 	;;
     Amiga*:UNIX_System_V:4.0:*)
@@ -415,15 +415,15 @@ case $UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION in
 	esac
 	;;
     s390x:SunOS:*:*)
-	SUN_REL=`echo "$UNAME_RELEASE" | sed -e 's/[^.]*//'`
+	SUN_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[^.]*//')
 	GUESS=$UNAME_MACHINE-ibm-solaris2$SUN_REL
 	;;
     sun4H:SunOS:5.*:*)
-	SUN_REL=`echo "$UNAME_RELEASE" | sed -e 's/[^.]*//'`
+	SUN_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[^.]*//')
 	GUESS=sparc-hal-solaris2$SUN_REL
 	;;
     sun4*:SunOS:5.*:* | tadpole*:SunOS:5.*:*)
-	SUN_REL=`echo "$UNAME_RELEASE" | sed -e 's/[^.]*//'`
+	SUN_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[^.]*//')
 	GUESS=sparc-sun-solaris2$SUN_REL
 	;;
     i86pc:AuroraUX:5.*:* | i86xen:AuroraUX:5.*:*)
@@ -443,14 +443,14 @@ case $UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION in
 		SUN_ARCH=x86_64
 	    fi
 	fi
-	SUN_REL=`echo "$UNAME_RELEASE" | sed -e 's/[^.]*//'`
+	SUN_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[^.]*//')
 	GUESS=$SUN_ARCH-pc-solaris2$SUN_REL
 	;;
     sun4*:SunOS:6*:*)
 	# According to config.sub, this is the proper way to canonicalize
 	# SunOS6.  Hard to guess exactly what SunOS6 will be like, but
 	# it's likely to be more like Solaris than SunOS4.
-	SUN_REL=`echo "$UNAME_RELEASE" | sed -e 's/[^.]*//'`
+	SUN_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[^.]*//')
 	GUESS=sparc-sun-solaris3$SUN_REL
 	;;
     sun4*:SunOS:*:*)
@@ -460,7 +460,7 @@ case $UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION in
 		;;
 	esac
 	# Japanese Language versions have a version number like `4.1.3-JL'.
-	SUN_REL=`echo "$UNAME_RELEASE" | sed -e 's/-/_/'`
+	SUN_REL=$(echo "$UNAME_RELEASE" | sed -e 's/-/_/')
 	GUESS=sparc-sun-sunos$SUN_REL
 	;;
     sun3*:SunOS:*:*)
@@ -549,7 +549,7 @@ case $UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION in
 	}
 EOF
 	$CC_FOR_BUILD -o "$dummy" "$dummy.c" &&
-	  dummyarg=`echo "$UNAME_RELEASE" | sed -n 's/\([0-9]*\).*/\1/p'` &&
+	  dummyarg=$(echo "$UNAME_RELEASE" | sed -n 's/\([0-9]*\).*/\1/p') &&
 	  SYSTEM_NAME=`"$dummy" "$dummyarg"` &&
 	    { echo "$SYSTEM_NAME"; exit; }
 	GUESS=mips-mips-riscos$UNAME_RELEASE
@@ -605,7 +605,7 @@ EOF
 	GUESS=m68k-tektronix-bsd
 	;;
     *:IRIX*:*:*)
-	IRIX_REL=`echo "$UNAME_RELEASE" | sed -e 's/-/_/g'`
+	IRIX_REL=$(echo "$UNAME_RELEASE" | sed -e 's/-/_/g')
 	GUESS=mips-sgi-irix$IRIX_REL
 	;;
     ????????:AIX?:[12].1:2)   # AIX 2.2.1 or AIX 2.1.1 is RT/PC AIX.
@@ -685,7 +685,7 @@ EOF
 	GUESS=m68k-hp-bsd4.4
 	;;
     9000/[34678]??:HP-UX:*:*)
-	HPUX_REV=`echo "$UNAME_RELEASE" | sed -e 's/[^.]*.[0B]*//'`
+	HPUX_REV=$(echo "$UNAME_RELEASE" | sed -e 's/[^.]*.[0B]*//')
 	case $UNAME_MACHINE in
 	    9000/31?)            HP_ARCH=m68000 ;;
 	    9000/[34]??)         HP_ARCH=m68k ;;
@@ -767,7 +767,7 @@ EOF
 	GUESS=$HP_ARCH-hp-hpux$HPUX_REV
 	;;
     ia64:HP-UX:*:*)
-	HPUX_REV=`echo "$UNAME_RELEASE" | sed -e 's/[^.]*.[0B]*//'`
+	HPUX_REV=$(echo "$UNAME_RELEASE" | sed -e 's/[^.]*.[0B]*//')
 	GUESS=ia64-hp-hpux$HPUX_REV
 	;;
     3050*:HI-UX:*:*)
@@ -845,7 +845,7 @@ EOF
 	GUESS=c4-convex-bsd
 	;;
     CRAY*Y-MP:*:*:*)
-	CRAY_REL=`echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/'`
+	CRAY_REL=$(echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/')
 	GUESS=ymp-cray-unicos$CRAY_REL
 	;;
     CRAY*[A-Z]90:*:*:*)
@@ -855,30 +855,30 @@ EOF
 	      -e 's/\.[^.]*$/.X/'
 	exit ;;
     CRAY*TS:*:*:*)
-	CRAY_REL=`echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/'`
+	CRAY_REL=$(echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/')
 	GUESS=t90-cray-unicos$CRAY_REL
 	;;
     CRAY*T3E:*:*:*)
-	CRAY_REL=`echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/'`
+	CRAY_REL=$(echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/')
 	GUESS=alphaev5-cray-unicosmk$CRAY_REL
 	;;
     CRAY*SV1:*:*:*)
-	CRAY_REL=`echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/'`
+	CRAY_REL=$(echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/')
 	GUESS=sv1-cray-unicos$CRAY_REL
 	;;
     *:UNICOS/mp:*:*)
-	CRAY_REL=`echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/'`
+	CRAY_REL=$(echo "$UNAME_RELEASE" | sed -e 's/\.[^.]*$/.X/')
 	GUESS=craynv-cray-unicosmp$CRAY_REL
 	;;
     F30[01]:UNIX_System_V:*:* | F700:UNIX_System_V:*:*)
 	FUJITSU_PROC=`uname -m | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
 	FUJITSU_SYS=`uname -p | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/\///'`
-	FUJITSU_REL=`echo "$UNAME_RELEASE" | sed -e 's/ /_/'`
+	FUJITSU_REL=$(echo "$UNAME_RELEASE" | sed -e 's/ /_/')
 	GUESS=${FUJITSU_PROC}-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}
 	;;
     5000:UNIX_System_V:4.*:*)
 	FUJITSU_SYS=`uname -p | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/\///'`
-	FUJITSU_REL=`echo "$UNAME_RELEASE" | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/ /_/'`
+	FUJITSU_REL=$(echo "$UNAME_RELEASE" | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz | sed -e 's/ /_/')
 	GUESS=sparc-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}
 	;;
     i*86:BSD/386:*:* | i*86:BSD/OS:*:* | *:Ascend\ Embedded/OS:*:*)
@@ -896,10 +896,10 @@ EOF
 	if echo __ARM_PCS_VFP | $CC_FOR_BUILD -E - 2>/dev/null \
 	    | grep -q __ARM_PCS_VFP
 	then
-	    FREEBSD_REL=`echo "$UNAME_RELEASE" | sed -e 's/[-(].*//'`
+	    FREEBSD_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[-(].*//')
 	    GUESS=$UNAME_PROCESSOR-unknown-freebsd$FREEBSD_REL-gnueabi
 	else
-	    FREEBSD_REL=`echo "$UNAME_RELEASE" | sed -e 's/[-(].*//'`
+	    FREEBSD_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[-(].*//')
 	    GUESS=$UNAME_PROCESSOR-unknown-freebsd$FREEBSD_REL-gnueabihf
 	fi
 	;;
@@ -911,7 +911,7 @@ EOF
 	    i386)
 		UNAME_PROCESSOR=i586 ;;
 	esac
-	FREEBSD_REL=`echo "$UNAME_RELEASE" | sed -e 's/[-(].*//'`
+	FREEBSD_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[-(].*//')
 	GUESS=$UNAME_PROCESSOR-unknown-freebsd$FREEBSD_REL
 	;;
     i*:CYGWIN*:*)
@@ -951,19 +951,19 @@ EOF
 	GUESS=x86_64-pc-cygwin
 	;;
     prep*:SunOS:5.*:*)
-	SUN_REL=`echo "$UNAME_RELEASE" | sed -e 's/[^.]*//'`
+	SUN_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[^.]*//')
 	GUESS=powerpcle-unknown-solaris2$SUN_REL
 	;;
     *:GNU:*:*)
 	# the GNU system
-	GNU_ARCH=`echo "$UNAME_MACHINE" | sed -e 's,[-/].*$,,'`
-	GNU_REL=`echo "$UNAME_RELEASE" | sed -e 's,/.*$,,'`
+	GNU_ARCH=$(echo "$UNAME_MACHINE" | sed -e 's,[-/].*$,,')
+	GNU_REL=$(echo "$UNAME_RELEASE" | sed -e 's,/.*$,,')
 	GUESS=$GNU_ARCH-unknown-$LIBC$GNU_REL
 	;;
     *:GNU/*:*:*)
 	# other systems with GNU libc and userland
-	GNU_SYS=`echo "$UNAME_SYSTEM" | sed 's,^[^/]*/,,' | tr "[:upper:]" "[:lower:]"`
-	GNU_REL=`echo "$UNAME_RELEASE" | sed -e 's/[-(].*//'`
+	GNU_SYS=$(echo "$UNAME_SYSTEM" | sed 's,^[^/]*/,,' | tr "[:upper:]" "[:lower:]")
+	GNU_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[-(].*//')
 	GUESS=$UNAME_MACHINE-unknown-$GNU_SYS$GNU_REL-$LIBC
 	;;
     *:Minix:*:*)
@@ -1211,7 +1211,7 @@ EOF
 	GUESS=$UNAME_MACHINE-pc-msdosdjgpp
 	;;
     i*86:*:4.*:*)
-	UNAME_REL=`echo "$UNAME_RELEASE" | sed 's/\/MP$//'`
+	UNAME_REL=$(echo "$UNAME_RELEASE" | sed 's/\/MP$//')
 	if grep Novell /usr/include/link.h >/dev/null 2>/dev/null; then
 		GUESS=$UNAME_MACHINE-univel-sysv$UNAME_REL
 	else
@@ -1516,7 +1516,7 @@ EOF
 	GUESS=mips-sei-seiux$UNAME_RELEASE
 	;;
     *:DragonFly:*:*)
-	DRAGONFLY_REL=`echo "$UNAME_RELEASE" | sed -e 's/[-(].*//'`
+	DRAGONFLY_REL=$(echo "$UNAME_RELEASE" | sed -e 's/[-(].*//')
 	GUESS=$UNAME_MACHINE-unknown-dragonfly$DRAGONFLY_REL
 	;;
     *:*VMS:*:*)
@@ -1530,7 +1530,7 @@ EOF
 	GUESS=i386-pc-xenix
 	;;
     i*86:skyos:*:*)
-	SKYOS_REL=`echo "$UNAME_RELEASE" | sed -e 's/ .*$//'`
+	SKYOS_REL=$(echo "$UNAME_RELEASE" | sed -e 's/ .*$//')
 	GUESS=$UNAME_MACHINE-pc-skyos$SKYOS_REL
 	;;
     i*86:rdos:*:*)
@@ -1720,7 +1720,7 @@ and
   https://git.savannah.gnu.org/cgit/config.git/plain/config.sub
 EOF
 
-our_year=`echo $timestamp | sed 's,-.*,,'`
+our_year=$(echo $timestamp | sed 's,-.*,,')
 thisyear=`date +%Y`
 # shellcheck disable=SC2003
 script_age=`expr "$thisyear" - "$our_year"`
